@@ -1,0 +1,194 @@
+package view;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTabbedPane;
+import java.awt.FlowLayout;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.TextArea;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.Button;
+
+import bd.core.MeuResultSet;
+import bd.daos.*;
+import bd.dbos.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+
+public class How2Usuario extends JFrame {
+
+	private JPanel contentPane;
+	private JTable table;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					How2Usuario frame = new How2Usuario();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	
+	public How2Usuario() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 790, 545);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		
+		//================ FOCUS DO TP1 ================
+		JPanel panel = new JPanel();
+		panel.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				try {
+					DefaultTableModel model  = new DefaultTableModel();
+					model.addColumn("Perguntas:");
+					
+					MeuResultSet result = Perguntas.getPerguntas();
+					
+					while(result.next())
+					{
+						model.addRow(new Object[] {result.getString(2)});
+					}
+					
+					JTable1
+					
+				}
+				catch(Exception err)
+				{
+					System.out.println(err.getMessage());
+				}
+				
+			}
+		});
+		tabbedPane.addTab("Responder Perguntas", null, panel, null);
+		panel.setLayout(null);
+		
+		JLabel lbPergunta = new JLabel("Selecione uma pergunta para responder!");
+		lbPergunta.setFont(new Font("Arial", Font.PLAIN, 12));
+		lbPergunta.setBounds(184, 11, 233, 14);
+		panel.add(lbPergunta);
+		
+		JLabel lblPerguntas = new JLabel("Perguntas:");
+		lblPerguntas.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblPerguntas.setBounds(10, 6, 111, 22);
+		panel.add(lblPerguntas);
+		
+		TextArea textArea = new TextArea();
+		textArea.setFont(new Font("Dialog", Font.PLAIN, 12));
+		textArea.setText("Digite sua resposta aqui!");
+		textArea.setBounds(184, 36, 565, 334);
+		panel.add(textArea);
+		
+		JButton btnAdicionarImagem = new JButton("Add Imagem");
+		btnAdicionarImagem.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnAdicionarImagem.setBounds(184, 376, 111, 37);
+		panel.add(btnAdicionarImagem);
+		
+		JButton btnEnviarResposta = new JButton("Env Resposta");
+		btnEnviarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEnviarResposta.setBounds(305, 376, 111, 37);
+		panel.add(btnEnviarResposta);
+		
+		JButton btnCarregar = new JButton("Carregar Perguntas");
+		btnCarregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		btnCarregar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnCarregar.setBounds(10, 424, 164, 37);
+		panel.add(btnCarregar);
+		
+		table = new JTable();
+		table.setBounds(10, 39, 165, 375);
+		panel.add(table);
+		
+		//================ FOCUS DO TP2 ================
+		JPanel panel_1 = new JPanel();
+		panel_1.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				
+			}
+		});
+		tabbedPane.addTab("Validar Respostas", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JList list_1 = new JList();
+		list_1.setBounds(10, 34, 164, 379);
+		panel_1.add(list_1);
+		
+		JLabel lblNewLabel = new JLabel("Selecione uma resposta para valida-la");
+		lblNewLabel.setBounds(184, 12, 192, 14);
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblRespostas = new JLabel("Respostas:");
+		lblRespostas.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblRespostas.setBounds(10, 5, 122, 23);
+		panel_1.add(lblRespostas);
+		
+		TextArea textArea_1 = new TextArea();
+		textArea_1.setBounds(184, 34, 565, 336);
+		panel_1.add(textArea_1);
+		
+		JButton btnEditarResposta = new JButton("Editar Resposta");
+		btnEditarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEditarResposta.setBounds(184, 376, 122, 37);
+		panel_1.add(btnEditarResposta);
+		
+		JButton btnValidarResposta = new JButton("Validar Resposta");
+		btnValidarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnValidarResposta.setBounds(316, 376, 127, 37);
+		panel_1.add(btnValidarResposta);
+	}
+
+	public static void NewScreen() {
+		EventQueue.invokeLater(new Runnable(){
+			public void run() {
+				try
+				{
+					How2Usuario window = new How2Usuario();
+					window.setVisible(true);
+				}
+				catch(Exception err) 
+				{
+					err.printStackTrace();
+				}
+			}
+		});
+	}
+}

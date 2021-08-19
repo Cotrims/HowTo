@@ -1,0 +1,532 @@
+package view;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTabbedPane;
+import java.awt.FlowLayout;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.TextArea;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.Button;
+
+import bd.core.MeuResultSet;
+import bd.daos.*;
+import bd.dbos.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import java.awt.Color;
+import javax.swing.JComboBox;
+import javax.swing.JScrollBar;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+public class How2Usuario extends JFrame {
+
+	private JPanel contentPane;
+	private JTable tbPerguntas;
+	private int idPergunta;
+	MeuResultSet respostasInvalidas = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					How2Usuario frame = new How2Usuario();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	
+	public How2Usuario() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 890, 545);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		
+		//================ FOCUS DO TP2 ================
+		JPanel plValidar = new JPanel();
+		plValidar.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				try {	
+					respostasInvalidas = Respostas.getRespostas();
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		//================ FOCUS DO TP1 ================
+		JPanel plResponder = new JPanel();
+		plResponder.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				try {
+					DefaultTableModel model  = new DefaultTableModel();
+					model.addColumn("Perguntas:");
+					
+					MeuResultSet result = Perguntas.getPerguntas();
+					
+					while(result.next())
+					{
+						if(result.getString(4).equals("N"))
+							model.addRow(new Object[] {result.getString(3)});
+					}
+					
+					tbPerguntas.setModel(model);
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}	
+			}
+		});
+		tabbedPane.addTab("Responder Perguntas", null, plResponder, null);
+		plResponder.setLayout(null);
+		
+		JLabel lbPergunta = new JLabel("Selecione uma pergunta para responder!");
+		lbPergunta.setFont(new Font("Arial", Font.PLAIN, 25));
+		lbPergunta.setBounds(120, 12, 620, 33);
+		plResponder.add(lbPergunta);
+		
+		JLabel lblPerguntas = new JLabel("Perguntas:");
+		lblPerguntas.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblPerguntas.setBounds(10, 19, 111, 22);
+		plResponder.add(lblPerguntas);
+		
+		TextArea txtResposta = new TextArea();
+		txtResposta.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txtResposta.setText("Digite sua resposta aqui!");
+		txtResposta.setBounds(252, 51, 466, 408);
+		plResponder.add(txtResposta);
+		
+		JButton btnAdicionarImagem = new JButton("Add Imagem");
+		btnAdicionarImagem.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnAdicionarImagem.setBounds(727, 81, 122, 37);
+		plResponder.add(btnAdicionarImagem);
+		
+		JButton btnEnviarResposta = new JButton("Env Resposta");
+		btnEnviarResposta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try
+				{
+					
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		btnEnviarResposta.setForeground(Color.BLACK);
+		btnEnviarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEnviarResposta.setBounds(728, 421, 121, 37);
+		plResponder.add(btnEnviarResposta);
+		
+		JButton btnCarregar = new JButton("Carregar Perguntas");
+		btnCarregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					DefaultTableModel model  = new DefaultTableModel();
+					model.addColumn("Perguntas:");
+					
+					MeuResultSet result = Perguntas.getPerguntas();
+					
+					while(result.next())
+					{
+						if(result.getString(4).equals("N"))
+							model.addRow(new Object[] {result.getString(3)});
+					}
+					
+					tbPerguntas.setModel(model);
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}	
+			}
+		});
+		btnCarregar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnCarregar.setBounds(10, 421, 236, 37);
+		plResponder.add(btnCarregar);
+		
+		tbPerguntas = new JTable();
+		tbPerguntas.setBounds(10, 52, 236, 362);
+		plResponder.add(tbPerguntas);
+		
+		JLabel lbIdPergunta = new JLabel("|");
+		lbIdPergunta.setForeground(Color.WHITE);
+		lbIdPergunta.setFont(new Font("Arial", Font.PLAIN, 12));
+		lbIdPergunta.setBounds(110, 12, 37, 14);
+		plResponder.add(lbIdPergunta);
+		
+		JLabel lblFerramentas = new JLabel("Ferramentas");
+		lblFerramentas.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblFerramentas.setBounds(743, 56, 93, 14);
+		plResponder.add(lblFerramentas);
+		
+		JButton button = new JButton("Add Imagem");
+		button.setFont(new Font("Arial", Font.PLAIN, 12));
+		button.setBounds(727, 124, 122, 37);
+		plResponder.add(button);
+		
+		JButton button_1 = new JButton("Add Imagem");
+		button_1.setFont(new Font("Arial", Font.PLAIN, 12));
+		button_1.setBounds(727, 169, 122, 37);
+		plResponder.add(button_1);
+		
+		JLabel lblFonte = new JLabel("Fonte");
+		lblFonte.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFonte.setBounds(727, 221, 46, 14);
+		plResponder.add(lblFonte);
+		
+		JButton button_2 = new JButton("!");
+		button_2.setFont(new Font("Tunga", Font.PLAIN, 11));
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 JOptionPane.showMessageDialog(null,"O tamanho da fonte não será \n"
+				 									+ "alterado na exibição oficial!");
+			}
+		});
+		button_2.setBounds(817, 217, 32, 23);
+		plResponder.add(button_2);
+		
+		JSpinner spFontSize = new JSpinner();
+		spFontSize.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				 if((int)spFontSize.getValue() <= 0)
+					 spFontSize.setValue(1);
+				 
+				 Font nova = new Font("Arial", Font.PLAIN, (int)spFontSize.getValue());
+				 txtResposta.setFont(nova);
+			}
+		});
+		spFontSize.setBounds(770, 218, 37, 22);
+		plResponder.add(spFontSize);
+		
+		JButton btnEditar = new JButton("Editar pergunta");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					JFrame frame = new JFrame();
+					
+					String descricao = lbPergunta.getText();
+					String text = JOptionPane.showInputDialog(frame, "Edite esta pergunta e pressione OK", descricao);
+
+					if (!text.equals(descricao)) {
+						Pergunta perg = Perguntas.getPergunta(descricao);
+						perg.setDescricao(text);
+						Perguntas.alterar(perg);
+						lbPergunta.setText(perg.getDescricao());
+					}	    	
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		btnEditar.setForeground(Color.BLACK);
+		btnEditar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEditar.setBounds(728, 378, 121, 37);
+		plResponder.add(btnEditar);
+		
+		JButton btnExcluir = new JButton("Exluir pergunta");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					int opcao = JOptionPane.showConfirmDialog(
+						    null,
+						    "Você realmente quer excluir essa pergunta?",
+						    "Exclusão",
+						    JOptionPane.YES_NO_OPTION);
+					
+					if(opcao == 0)
+					{
+						JOptionPane.showMessageDialog(null,Integer.parseInt(lbIdPergunta.getText()));
+						Perguntas.excluir(Integer.parseInt(lbIdPergunta.getText()));
+					}	
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		btnExcluir.setForeground(Color.BLACK);
+		btnExcluir.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnExcluir.setBounds(728, 334, 121, 37);
+		plResponder.add(btnExcluir);
+		
+		tbPerguntas.addMouseListener(new MouseAdapter() {
+            @Override
+             public void mouseClicked(MouseEvent e) {
+            	try {
+            		int index = tbPerguntas.getSelectedRow();
+            		lbPergunta.setText(tbPerguntas.getValueAt(index, 0) + "");
+            		lbIdPergunta.setText(Perguntas.getPergunta(lbPergunta.getText()).getIdPergunta() + "");
+            	}
+            	catch(Exception err) 
+            	{
+            		JOptionPane.showMessageDialog(null,err.getMessage());
+            	}
+             }            
+        });
+		tabbedPane.addTab("Valida\u00E7\u00E3o de Pergunta", null, plValidar, null);
+		plValidar.setLayout(null);
+		
+		JButton btnEditarResposta = new JButton("Editar Resposta");
+		btnEditarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEditarResposta.setBounds(264, 421, 122, 37);
+		plValidar.add(btnEditarResposta);
+		
+		TextArea txtRespostaV = new TextArea();
+		txtRespostaV.setText("Digite sua resposta aqui!");
+		txtRespostaV.setFont(new Font("Dialog", Font.PLAIN, 12));
+		txtRespostaV.setBounds(130, 63, 602, 268);
+		plValidar.add(txtRespostaV);
+		
+		JLabel lbIdPerguntaV = new JLabel("|");
+		lbIdPerguntaV.setForeground(Color.WHITE);
+		lbIdPerguntaV.setFont(new Font("Arial", Font.PLAIN, 12));
+		lbIdPerguntaV.setBounds(10, 444, 37, 14);
+		plValidar.add(lbIdPerguntaV);
+		
+		JLabel lbPerguntaV = new JLabel("Selecione uma pergunta para responder!");
+		lbPerguntaV.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				try {
+					int idPerg = (int)respostasInvalidas.getInt(6);
+					Pergunta perg = Perguntas.getPergunta(idPerg);
+            		lbPerguntaV.setText(perg.getDescricao());
+            		lbIdPerguntaV.setText(perg.getIdPergunta() + "");
+            	}
+            	catch(Exception err) {
+            		JOptionPane.showMessageDialog(null,err.getMessage());
+            	}
+			}
+		});
+		lbPerguntaV.setFont(new Font("Arial", Font.PLAIN, 25));
+		lbPerguntaV.setBounds(10, 11, 784, 33);
+		plValidar.add(lbPerguntaV);
+		
+		JLabel label_2 = new JLabel("Ferramentas");
+		label_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		label_2.setBounds(135, 348, 93, 14);
+		plValidar.add(label_2);
+		
+		JButton btnNegrito = new JButton("Negrito");
+		btnNegrito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNegrito.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnNegrito.setBounds(132, 373, 122, 37);
+		plValidar.add(btnNegrito);
+		
+		JButton btnItlico = new JButton("It\u00E1lico");
+		btnItlico.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnItlico.setBounds(132, 421, 122, 37);
+		plValidar.add(btnItlico);
+		
+		JButton btnLista = new JButton("Lista");
+		btnLista.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnLista.setBounds(264, 373, 122, 37);
+		plValidar.add(btnLista);
+		
+		JLabel label_3 = new JLabel("Fonte");
+		label_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		label_3.setBounds(396, 380, 46, 14);
+		plValidar.add(label_3);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+			}
+		});
+		spinner.setBounds(436, 377, 53, 22);
+		plValidar.add(spinner);
+		
+		JButton button_7 = new JButton("!");
+		button_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,"O tamanho da fonte não será \n"
+							+ "alterado na exibição oficial!");
+			}
+		});
+		button_7.setBounds(499, 378, 37, 21);
+		plValidar.add(button_7);
+		
+		JButton btnEnviarResposta_1 = new JButton("Enviar resposta");
+		btnEnviarResposta_1.setForeground(Color.BLACK);
+		btnEnviarResposta_1.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEnviarResposta_1.setBounds(550, 373, 182, 37);
+		plValidar.add(btnEnviarResposta_1);
+		
+		JButton btnProxima = new JButton("\u25BA");
+		btnProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(!respostasInvalidas.isLast())
+					{			
+						respostasInvalidas.next();
+						
+						int idPerg = (int)respostasInvalidas.getInt(6);
+						Pergunta perg = Perguntas.getPergunta((short)idPerg);
+						JOptionPane.showMessageDialog(null,perg.getDescricao() + perg.getIdPergunta());
+						Resposta resp = Respostas.getRespostaPorIdPergunta(perg.getIdPergunta());
+						
+						JOptionPane.showMessageDialog(null,resp.getDescricao());
+
+						while(resp.getValida() == 'S')
+						{
+							perg = Perguntas.getPergunta(idPerg);
+							resp = Respostas.getResposta(perg.getIdPergunta());
+						}
+						
+						JOptionPane.showMessageDialog(null,resp.getDescricao() + "" + perg.getDescricao() + perg.getIdPergunta());
+						
+						txtRespostaV.setText(resp.getDescricao());
+						lbPerguntaV.setText(perg.getDescricao());
+						lbIdPerguntaV.setText(perg.getIdPergunta() + "");
+						
+						if(respostasInvalidas.isLast())
+							btnProxima.setEnabled(false);
+					}
+					else
+					{
+						
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		btnProxima.setFont(new Font("Arial", Font.BOLD, 35));
+		btnProxima.setBounds(761, 183, 70, 70);
+		plValidar.add(btnProxima);
+		
+		JButton btnAnterior = new JButton("\u25C4");
+		btnAnterior.setEnabled(false);
+		btnAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(!respostasInvalidas.first())
+					{
+						respostasInvalidas.previous();
+						
+						int idPerg = (int)respostasInvalidas.getInt(6);
+						Pergunta perg = Perguntas.getPergunta(idPerg);
+						Resposta resp = Respostas.getResposta(perg.getIdPergunta());
+						
+						JOptionPane.showMessageDialog(null,resp.getDescricao() + "" + perg.getDescricao() + perg.getIdPergunta());
+
+						while(resp.getValida() == 'S')
+						{
+							perg = Perguntas.getPergunta(idPerg);
+							resp = Respostas.getResposta(perg.getIdPergunta());
+						}
+						
+						JOptionPane.showMessageDialog(null,resp.getDescricao() + "" + perg.getDescricao() + perg.getIdPergunta());
+						
+						txtRespostaV.setText(resp.getDescricao());
+						lbPerguntaV.setText(perg.getDescricao());
+						lbIdPerguntaV.setText(perg.getIdPergunta() + "");
+						
+						
+						if(respostasInvalidas.first())
+							btnAnterior.setEnabled(false);
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		btnAnterior.setFont(new Font("Arial", Font.BOLD, 35));
+		btnAnterior.setBounds(27, 183, 70, 70);
+		plValidar.add(btnAnterior);
+		
+		JLabel lblAnterior = new JLabel("Anterior");
+		lblAnterior.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblAnterior.setBounds(38, 161, 62, 14);
+		plValidar.add(lblAnterior);
+		
+		JLabel lblPrxima = new JLabel("Pr\u00F3xima");
+		lblPrxima.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblPrxima.setBounds(761, 161, 62, 14);
+		plValidar.add(lblPrxima);
+		
+		JButton btnValidarResposta = new JButton("Validar resposta");
+		btnValidarResposta.setForeground(Color.BLACK);
+		btnValidarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnValidarResposta.setBounds(550, 421, 182, 37);
+		plValidar.add(btnValidarResposta);
+		;
+	}
+
+	public static void NewScreen() {
+		EventQueue.invokeLater(new Runnable(){
+			public void run() {
+				try
+				{
+					How2Usuario window = new How2Usuario();
+					window.setVisible(true);
+				}
+				catch(Exception err) 
+				{
+					err.printStackTrace();
+				}
+			}
+		});
+	}
+}

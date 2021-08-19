@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" author="true" classpath="src/ojdbc6.jar;src/postgresql4225.jar;src/mongo390.jar;src/mysql5.jar;src/sqljdbc42.jar" destdir="doc" doctitle="Java FTP Client Utility API" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="bd.core,bd.daos,bd.dbos" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

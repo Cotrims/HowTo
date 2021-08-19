@@ -1,0 +1,195 @@
+package view;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import bd.daos.*;
+import bd.dbos.*;
+import javax.swing.JPasswordField;
+
+public class How2 {
+
+	private JFrame frmHow;
+	private JTextField txtEmail;
+	private JPasswordField pwfSenha;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					How2 window = new How2();
+					window.frmHow.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public How2() {
+		initialize();
+	}
+	
+	public static void openWebpage(String urlString) {
+	    try {
+	        Desktop.getDesktop().browse(new URL(urlString).toURI()); //Metodo para abrir um link na web
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmHow = new JFrame();
+		frmHow.setResizable(false);
+		frmHow.setTitle("How2");
+		frmHow.setBounds(100, 100, 590, 330);
+		frmHow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmHow.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		frmHow.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(310, 11, 254, 270);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblLogin = new JLabel("Login");
+		lblLogin.setBounds(85, 25, 99, 57);
+		panel_1.add(lblLogin);
+		lblLogin.setFont(new Font("Arial", Font.PLAIN, 35));
+		
+		JLabel lblNewLabel = new JLabel("Email: ");
+		lblNewLabel.setBounds(19, 113, 46, 14);
+		panel_1.add(lblNewLabel);
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+		
+		txtEmail = new JTextField();
+		txtEmail.setBounds(63, 111, 169, 20);
+		panel_1.add(txtEmail);
+		txtEmail.setColumns(10);
+		
+		JLabel lblSenha = new JLabel("Senha: ");
+		lblSenha.setBounds(19, 148, 46, 14);
+		panel_1.add(lblSenha);
+		lblSenha.setFont(new Font("Arial", Font.PLAIN, 12));
+		
+		//================ LOGIN ================
+		JButton btnNewButton = new JButton("Logar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String email = txtEmail.getText(); //Pegamos o emial
+				String senha = pwfSenha.getText(); //Pegamos a senha
+				
+				try
+				{
+					if(!email.equals("") && !senha.equals(""))
+						if(Ajudantes.cadastrado(email))
+						{
+							Ajudante ajud = new Ajudante(Ajudantes.getAjudante(email));
+							if(ajud.getSenha().equals(senha))
+							{
+								How2Usuario.NewScreen();
+								frmHow.setVisible(false);
+							}
+							else
+								JOptionPane.showMessageDialog(null,"Hey " + ajud.getNome() +", Você digitou sua senha incorretamente!");
+						}
+						else
+							JOptionPane.showMessageDialog(null,"Você não possui um cadastro!");
+					
+				}
+				catch(Exception err)
+				{
+					System.err.println();
+				}
+			}
+		});
+		
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnNewButton.setBounds(141, 183, 91, 23);
+		panel_1.add(btnNewButton);
+		
+		//================ LINK PRA CADASTRO ================
+		JLabel lblNCadastro = new JLabel("N\u00E3o tenho cadastro");
+		lblNCadastro.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				openWebpage("http://localhost:3000/respostas");
+			}
+		});
+		
+		lblNCadastro.setForeground(Color.BLUE);
+		lblNCadastro.setFont(new Font("Arial", Font.PLAIN, 12));
+		lblNCadastro.setBounds(19, 187, 126, 14);
+		panel_1.add(lblNCadastro);
+		
+		pwfSenha = new JPasswordField();
+		pwfSenha.setBounds(63, 146, 169, 20);
+		panel_1.add(pwfSenha);
+		
+		JLabel lblTextoDeBoas = new JLabel("Bem-vindos...");
+		lblTextoDeBoas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTextoDeBoas.setFont(new Font("Arial", Font.BOLD, 18));
+		lblTextoDeBoas.setBounds(10, 11, 137, 35);
+		panel.add(lblTextoDeBoas);
+		
+		JLabel lblAtravsDessePortal = new JLabel("Atrav\u00E9s desse portal \u00E9 que voc\u00EA,");
+		lblAtravsDessePortal.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblAtravsDessePortal.setBounds(35, 94, 233, 19);
+		panel.add(lblAtravsDessePortal);
+		
+		JLabel lblGentilInstrutorPode = new JLabel("gentil instrutor, pode acessar as");
+		lblGentilInstrutorPode.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblGentilInstrutorPode.setBounds(35, 119, 233, 19);
+		panel.add(lblGentilInstrutorPode);
+		
+		JLabel lblPerguntasESer = new JLabel("perguntas e ser uma boa alma,");
+		lblPerguntasESer.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblPerguntasESer.setBounds(35, 142, 233, 19);
+		panel.add(lblPerguntasESer);
+		
+		JLabel lblAjundandoAlgumEm = new JLabel("ajundando algu\u00E9m em necessidade.");
+		lblAjundandoAlgumEm.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblAjundandoAlgumEm.setBounds(35, 167, 255, 19);
+		panel.add(lblAjundandoAlgumEm);
+		
+		JLabel lblEntoVamosL = new JLabel("Ent\u00E3o vamos l\u00E1, bom samaritano,");
+		lblEntoVamosL.setFont(new Font("Arial", Font.BOLD, 17));
+		lblEntoVamosL.setBounds(10, 218, 269, 22);
+		panel.add(lblEntoVamosL);
+		
+		JLabel lblHPerguntasPara = new JLabel("h\u00E1 perguntas para serem respondidas!");
+		lblHPerguntasPara.setFont(new Font("Arial", Font.BOLD, 15));
+		lblHPerguntasPara.setBounds(20, 239, 305, 30);
+		panel.add(lblHPerguntasPara);
+		
+		JLabel lblAoAplicativoOficial = new JLabel("ao aplicativo oficial do HowTo!");
+		lblAoAplicativoOficial.setFont(new Font("Arial", Font.PLAIN, 18));
+		lblAoAplicativoOficial.setBounds(46, 45, 254, 22);
+		panel.add(lblAoAplicativoOficial);
+	}
+}

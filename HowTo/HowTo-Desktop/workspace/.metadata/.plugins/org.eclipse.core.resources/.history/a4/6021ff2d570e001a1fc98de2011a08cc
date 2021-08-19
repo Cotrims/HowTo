@@ -1,0 +1,228 @@
+package bd.dbos;
+import java.sql.*;
+
+/**
+ * Representa uma pergunta existente no banco de dados,
+ * com cada um de seus atributos correspondentes a uma
+ * coluna de uma pergunta.
+ * @author Vinícius Martins Cotrim.
+ * @author Guilherme José S. A.
+ * @since 2019.
+ */
+
+public class Pergunta implements Cloneable
+{
+	/**
+	 * O id da pergunta no banco de dados.
+	 */
+    private int idPergunta;
+    
+    /**
+     * A frequencia em que essa pergunta eh visualizada.
+     */
+	private int	frequencia;
+	
+	/**
+	 * Uma data que mostra quando a pergunta foi feita.
+	 */
+    private Date dataPergunta;
+    
+    /**
+     * Um char que indica se a pergunta foi ou nao respondida.
+     */
+    private char respondida;
+    
+    /**
+     * A descricao da pergunta, ou seja, a pergunta em si.
+     */
+    private String descricao;
+
+    /**
+     * Atribui ao this o valor de seu atributo idPergunta.
+     * @param idPergunta O valor a ser atribuido.
+     * @throws Exception Caso o valor fornecido seja inapropriado.
+     * ou seja, menor ou igual a zero.
+     */
+    public void setIdPergunta (int idPergunta) throws Exception
+    {
+        if (idPergunta <= 0)
+            throw new Exception ("id invalido");
+
+        this.idPergunta = idPergunta;
+    }
+    
+    /**
+     * Atribui ao this o valor de seu atributo frequencia.
+     * @param frequencia O valor a ser atribuido.
+     * @throws Exception Caso o valor fornecido seja inapropriado.
+     * ou seja menor que zero.
+     */
+    public void setFrequencia (int frequencia) throws Exception
+	{
+	    if (frequencia < 0)
+	        throw new Exception ("Frequência invalida");
+
+	    this.frequencia = frequencia;
+    }
+
+    /**
+     * Atribui ao this o valor de seu atributo data.
+     * @param data Uma data que eh valor a ser atribuido.
+     * @throws Exception Caso a data passada como parametro seja nula.
+     */
+    public void setDataPergunta (Date data) throws Exception
+    {
+        if (data == null)
+            throw new Exception ("Data invalida");
+		
+        this.dataPergunta = data;
+    }
+
+    /**
+     * Atribui ao this o valor de seu atributo respondida.
+     * @param respondida O valor a ser atribuido.
+     * @throws Exception Caso o valor fornecido seja inapropriado.
+     * ou seja, vazio.
+     */
+    public void setRespondida (char respondida) throws Exception
+	{
+	    if (respondida == ' ')
+	        throw new Exception ("Parametro valido");
+
+	    this.respondida = respondida;
+    }
+
+    /**
+     * Atribui ao this o valor de seu atributo descricao.
+     * @param descricao O valor a ser atribuido.
+     * @throws Exception Caso o valor fornecido senha nulo ou
+     * vazio.
+     */
+    public void setDescricao (String descricao) throws Exception
+	{
+	    if (descricao == null || descricao.equals(""))
+	        throw new Exception ("Descricao invalida");
+
+	    this.descricao = descricao;
+    }
+
+    public int getIdPergunta ()
+    {
+        return this.idPergunta;
+    }
+
+    public int getFrequencia ()
+    {
+        return this.frequencia;
+    }
+
+    public Date getDataPergunta ()
+    {
+        return this.dataPergunta;
+    }
+
+    public char getRespondida()
+    {
+		return this.respondida;
+	}
+
+    public String getDescricao ()
+    {
+        return this.descricao;
+    }
+
+    public Pergunta (int idPerg, int freq, Date data, char resp, String desc) throws Exception
+    {
+        this.setIdPergunta (idPerg);
+        this.setFrequencia (freq);
+        this.setDataPergunta(data);
+        this.setRespondida (resp);
+        this.setDescricao (desc);
+    }
+
+    public String toString ()
+    {
+        String ret="";
+
+        ret+="Id: "+this.idPergunta+"\n";
+        ret+="Frequência: "+this.frequencia  +"\n";
+        ret+="Data: "+this.dataPergunta  +"\n";
+		ret+="Respondida?: "+this.respondida  +"\n";
+		ret+="Descrição: "+this.descricao + "";
+
+        return ret;
+    }
+
+    public boolean equals (Object obj)
+	{
+	    if (this==obj)
+	    	return true;
+
+	    if (obj==null)
+	        return false;
+
+	    if (!(obj instanceof Pergunta))
+	        return false;
+
+	    Pergunta perg = (Pergunta)obj;
+
+	    if (this.idPergunta!=perg.idPergunta)
+	        return false;
+
+	    if (this.frequencia!=perg.frequencia)
+	        return false;
+
+	    if (!(this.dataPergunta.equals(perg.dataPergunta)))
+	        return false;
+		
+		if(this.respondida!=perg.respondida)
+			return false;
+
+		if(this.descricao!=perg.descricao)
+			return false;
+
+	    return true;
+   	}
+
+	public int hashCode ()
+	{
+		int ret=1;
+
+	    ret = 7*ret + new Integer(this.idPergunta).hashCode();
+	    ret = 7*ret + new Integer(this.frequencia).hashCode();
+	    ret = 7*ret + this.dataPergunta.hashCode();
+	    ret = 7*ret + new Character(this.respondida).hashCode();
+	    ret = 7*ret + this.descricao.hashCode();
+
+	    if(ret < 0)
+	    	ret = -ret;
+
+	    return ret;
+	}
+
+	public Pergunta (Pergunta modelo) throws Exception
+	{
+		if(modelo == null)
+			throw new Exception("Modelo para copia vazio");
+
+	    this.idPergunta = modelo.idPergunta;
+		this.frequencia = modelo.frequencia;
+		this.dataPergunta = modelo.dataPergunta;
+		this.respondida = modelo.respondida;
+		this.descricao = modelo.descricao;
+	}
+
+	public Object clone ()
+	{
+	    Pergunta ret=null;
+
+	    try
+	    {
+	        ret = new Pergunta (this);
+	    }
+	    catch (Exception erro)
+	    {}
+
+	   	return ret;
+    }
+}

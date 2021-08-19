@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.wb.internal.swing.model.property.editor.font.FontDialog">
+		<item value="152" key="x"/>
+		<item value="504" key="width"/>
+		<item value="159" key="y"/>
+		<item value="506" key="height"/>
+	</section>
+	<section name="org.eclipse.wb.internal.swing.model.property.editor.border.BorderDialog">
+		<item value="577" key="x"/>
+		<item value="482" key="width"/>
+		<item value="269" key="y"/>
+		<item value="380" key="height"/>
+	</section>
+	<section name="org.eclipse.wb.internal.swing.model.property.editor.models.combo.ComboBoxModelDialog">
+		<item value="562" key="x"/>
+		<item value="476" key="width"/>
+		<item value="248" key="y"/>
+		<item value="364" key="height"/>
+	</section>
+	<section name="org.eclipse.wb.internal.swing.model.property.editor.icon.IconPropertyEditor$ImageDialog">
+		<item value="359" key="x"/>
+		<item value="881" key="width"/>
+		<item value="140" key="y"/>
+		<item value="579" key="height"/>
+	</section>
+	<section name="org.eclipse.wb.internal.swing.model.property.editor.models.spinner.SpinnerModelDialog">
+		<item value="537" key="x"/>
+		<item value="525" key="width"/>
+		<item value="199" key="y"/>
+		<item value="461" key="height"/>
+	</section>
+</section>

@@ -1,0 +1,83 @@
+<tr>
+    <td class="body-table" style="height: 32%;">
+        <div class="titulos"> Faça perguntas...</div>
+        <div class="corpo">
+            <form action="/perguntas/inserir" method="POST">
+                <div id="camp-dig">
+                    <input class="camp-dig" type="text" name="desc" id="env-perg" placeholder="Digite sua pergunta" maxlength="300">
+                    <button class="botao-p" type="submit">Enviar</button>
+                </div>
+            </form>
+            <div id="camp-dig">
+                <input class="camp-dig" type="text" name="desc" id="busc-perg" placeholder="Procure sua pergunta">
+                <button class="botao-p" id="btn-pesq">Buscar</button>
+            </div>
+            <div>Faça uma pergunta nova ou busque por uma já feita</div>
+        </div>
+    </td>
+    <td class="body-table" rowspan="2" style="width: 50%;">
+        <div id="desc-perg" class="subtitulos">Como fazer uma pergunta?</div>
+        <div class="corpo">
+            <div id="resp">
+                <div id="desc-resp">
+                    Mas essa resposta é facil, você tem três opções:
+                    <br>
+                    <br> 1º Digite sua pergunta no campo "Digite sua pergunta" e clique em enviar para que algum de nossos ajudantes te responda
+                    <br>
+                    <br> 2º Digite sua pergunta no campo "Procure sua pergunta" e clique em buscar para ver se sua dúvida já tem uma resposta
+                    <br>
+                    <br> 3º Você pode selecionar uma pergunta na seção, "Aqui estão as perguntas mais feitas" para ver uma resposta
+                </div>
+                <p id="aut-perg">
+                    Autor: O grande ajudante
+                </p>
+                <div id="data-perg">Data: Hoje</div>
+            </div>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td class="body-table" style="width: 50%;">
+        <div class="titulos" id="pergBusc">
+            Estas são as duvidas frequentes:
+        </div>
+        <div id="perguntas" class="corpo">
+            <%for(var i=0;i<lista.length;i++) {%>
+                <div class='pergunta <%=lista[i].respondida%>' idperg="<%=lista[i].idPergunta%>">
+                    <%=lista[i].descricao%>
+                </div>
+                <%}%>
+        </div>
+    </td>
+</tr>
+
+<style>
+    /*As perguntas não respodidas não serão mostradas */
+    
+    .N {
+        display: none;
+    }
+    
+    .S {
+        display: block;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        /*Click da pergunta para busca-la*/
+
+        $(document.body).on('click',".pergunta",function() {
+            var id = $(this).attr("idperg");
+            var url = "http://localhost:3000/perguntas/" + id + "";
+            $.getJSON(url, function(result) {
+                var perg = result;
+                $('#desc-perg').html(perg[0].descPerg);
+                $('#desc-resp').html(perg[0].descResp);
+                $('#aut-perg').html("Autor da resposta: " + perg[0].autor);
+                $('#data-perg').html("Data: " + new Date(perg[0].dataPergunta).toLocaleDateString());
+            });
+        });
+    })
+</script>

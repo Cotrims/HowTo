@@ -1,0 +1,787 @@
+package view;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTabbedPane;
+import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.TextArea;
+
+import javax.swing.JButton;
+
+import bd.core.MeuResultSet;
+import bd.daos.*;
+import bd.dbos.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.SpinnerNumberModel;
+import java.sql.Date;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.Choice;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
+import javax.swing.DropMode;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+
+public class How2Usuario extends JFrame {
+
+	private JPanel contentPane;
+	private JTable tbPerguntas;
+	MeuResultSet respostasInvalidas = null;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					How2Usuario frame = new How2Usuario();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	
+	public How2Usuario() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 890, 545);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		
+		JPanel plResponder = new JPanel();
+		tabbedPane.addTab("Responder Perguntas", null, plResponder, null);
+		plResponder.setLayout(null);
+		
+		JLabel txtPerguntas = new JLabel("Perguntas:");
+		txtPerguntas.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtPerguntas.setBounds(10, 19, 111, 22);
+		plResponder.add(txtPerguntas);
+		
+		JButton btnNegrito = new JButton("Negrito");
+		btnNegrito.setEnabled(false);
+		btnNegrito.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnNegrito.setBounds(724, 110, 125, 37);
+		plResponder.add(btnNegrito);
+		
+		JButton btnCarregar = new JButton("Carregar Perguntas");
+		btnCarregar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnCarregar.setBounds(10, 421, 236, 37);
+		plResponder.add(btnCarregar);
+		
+		JButton btnEnviarResposta = new JButton("Env Resposta");
+		btnEnviarResposta.setEnabled(false);
+		btnEnviarResposta.setForeground(Color.BLACK);
+		btnEnviarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEnviarResposta.setBounds(724, 422, 125, 37);
+		plResponder.add(btnEnviarResposta);
+		
+		JLabel lbIdPergunta = new JLabel("|");
+		lbIdPergunta.setEnabled(false);
+		lbIdPergunta.setForeground(Color.BLACK);
+		lbIdPergunta.setFont(new Font("Arial", Font.PLAIN, 12));
+		lbIdPergunta.setBounds(108, 19, 37, 14);
+		plResponder.add(lbIdPergunta);
+		
+		JLabel lbFerramentas = new JLabel("Ferramentas");
+		lbFerramentas.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbFerramentas.setBounds(743, 51, 93, 14);
+		plResponder.add(lbFerramentas);
+		
+		JButton btnItalico = new JButton("It\u00E1lico");
+		btnItalico.setEnabled(false);
+		btnItalico.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnItalico.setBounds(724, 156, 125, 37);
+		plResponder.add(btnItalico);
+		
+		JLabel lblFonte = new JLabel("Fonte");
+		lblFonte.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFonte.setBounds(727, 85, 46, 14);
+		plResponder.add(lblFonte);
+		
+		JButton btnFonteInfo = new JButton("...");
+		btnFonteInfo.setFont(new Font("Tunga", Font.PLAIN, 11));
+		btnFonteInfo.setBounds(817, 81, 32, 23);
+		plResponder.add(btnFonteInfo);
+		
+		JSpinner spFontSize = new JSpinner();
+		spFontSize.setModel(new SpinnerNumberModel(12, 1, 72, 1));
+		spFontSize.setBounds(770, 82, 37, 22);
+		plResponder.add(spFontSize);
+		
+		JButton btnEditar = new JButton("Editar pergunta");
+		btnEditar.setEnabled(false);
+		btnEditar.setForeground(Color.BLACK);
+		btnEditar.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEditar.setBounds(724, 377, 125, 37);
+		plResponder.add(btnEditar);
+		
+		JButton btnExcluir = new JButton("Exluir pergunta");
+		btnExcluir.setEnabled(false);
+		btnExcluir.setForeground(Color.BLACK);
+		btnExcluir.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnExcluir.setBounds(724, 329, 125, 37);
+		plResponder.add(btnExcluir);
+		
+		JComboBox cbLista = new JComboBox();
+		
+		cbLista.setEnabled(false);
+		cbLista.setModel(new DefaultComboBoxModel(new String[] {"Listas", "Inserir padr\u00E3o", "Inserir enumerada", "Inserir item", "Como funciona?"}));
+		cbLista.setBounds(724, 204, 125, 20);
+		plResponder.add(cbLista);
+		
+		JTextArea txtResposta = new JTextArea();
+		txtResposta.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtResposta.setText("Digite sua resposta aqui!");
+		txtResposta.setWrapStyleWord(true);
+		txtResposta.setLineWrap(true);
+		txtResposta.setBounds(256, 52, 458, 406);
+		plResponder.add(txtResposta);
+		
+		JTextArea txtPergunta = new JTextArea();
+		txtPergunta.setEditable(false);
+		txtPergunta.setWrapStyleWord(true);
+		txtPergunta.setLineWrap(true);
+		txtPergunta.setText("Escolha uma pergunta para responder!");
+		txtPergunta.setFont(new Font("Arial", Font.PLAIN, 28));
+		txtPergunta.setBackground(SystemColor.menu);
+		txtPergunta.setBounds(130, 9, 687, 37);
+		plResponder.add(txtPergunta);
+		
+		JButton button = new JButton("...");
+		button.setFont(new Font("Tunga", Font.PLAIN, 11));
+		button.setBounds(817, 18, 32, 23);
+		plResponder.add(button);
+		
+		tbPerguntas = new JTable();
+		tbPerguntas.setBounds(10, 53, 234, 357);
+		plResponder.add(tbPerguntas);
+		tbPerguntas.setPreferredSize(new Dimension(236,247));
+		tbPerguntas.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		tbPerguntas.addMouseListener(new MouseAdapter() {
+            @Override
+             public void mouseClicked(MouseEvent e) {
+            	try {
+            		int index = tbPerguntas.getSelectedRow();
+            		txtPergunta.setText(tbPerguntas.getValueAt(index, 0) + "");
+            		lbIdPergunta.setText(Perguntas.getPergunta(txtPergunta.getText()).getIdPergunta() + "");
+            		
+            		btnNegrito.setEnabled(true);
+					btnItalico.setEnabled(true);
+					cbLista.setEnabled(true);
+					btnExcluir.setEnabled(true);
+					btnEditar.setEnabled(true);
+					btnEnviarResposta.setEnabled(true);
+            	}
+            	catch(Exception err) 
+            	{
+            		JOptionPane.showMessageDialog(null,err.getMessage());
+            	}
+             }
+        });
+		
+		cbLista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String opcao = cbLista.getSelectedItem().toString();
+				switch(opcao)
+				{
+					case ("Inserir padrão"):
+						txtResposta.setText(txtResposta.getText() + "\n<ul>\n"
+																  + "    \n"
+																  + "</ul> ");
+					break;
+					
+					case ("Inserir enumerada"):
+						txtResposta.setText(txtResposta.getText() + "\n<ol>\n"
+																  + "    \n"
+																  + "</ol> ");
+					break;
+					
+					case ("Inserir item"):
+						txtResposta.setText(txtResposta.getText() + "<li> </li>");
+					break;
+		
+					case ("Como funciona?"):
+						JOptionPane.showMessageDialog(null,"Você deve selecionar se quer adicionar ao seu texto \n"
+														 + "uma lista padrão ou enumerada, ou um item de lista. \n"
+														 + "Após selecionar um item você deve coloca-lo no seu \n"
+														 + "texto no lugar que deseja.");
+					break;
+					}
+				}
+		});
+		
+		plResponder.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				try {
+					DefaultTableModel model  = new DefaultTableModel();
+					model.addColumn("Perguntas:");
+					
+					MeuResultSet result = Perguntas.getPerguntas();
+					
+					while(result.next())
+					{
+						if(result.getString(4).equals("N"))
+							model.addRow(new Object[] {result.getString(3)});
+					}
+					
+					tbPerguntas.setModel(model);
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}	
+			}
+		});
+		
+		btnCarregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					DefaultTableModel model  = new DefaultTableModel();
+					model.addColumn("Perguntas:");
+					
+					MeuResultSet result = Perguntas.getPerguntas();
+					
+					while(result.next())
+					{
+						if(result.getString(4).equals("N"))
+						{
+							model.addRow(new Object[] {result.getString(3)});
+						}
+					}
+					
+					tbPerguntas.setModel(model);
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}	
+			}
+		});
+		
+		btnEnviarResposta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try
+				{
+					int opcao = JOptionPane.showConfirmDialog(
+						    null,
+						    "Está tudo pronto para enviar?\n"
+						    + "Essa resposta não poderá ser editada!",
+						    "Inclisão",
+						    JOptionPane.YES_NO_OPTION);
+					
+					if(opcao == 0)
+					{
+						int idPerg = Perguntas.getPergunta(txtPergunta.getText()).getIdPergunta();
+						int idAjud = 1;
+						Date dataResposta = new Date(System.currentTimeMillis());
+						
+						Resposta resposta = new Resposta(1, idPerg, idAjud, dataResposta, 'S', txtResposta.getText());
+						Respostas.incluir(resposta);
+						
+						Pergunta pergunta = new Pergunta(Perguntas.getPergunta(idPerg));
+						pergunta.setRespondida('S');
+						Perguntas.alterar(pergunta);
+						
+						btnCarregar.doClick();
+					}
+					
+					btnNegrito.setEnabled(false);
+					btnItalico.setEnabled(false);
+					cbLista.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					btnEditar.setEnabled(false);
+					btnEnviarResposta.setEnabled(false);
+					txtResposta.setText("");
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		btnFonteInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				 JOptionPane.showMessageDialog(null,"O tamanho da fonte não será alterado\n"
+				 									+ "na exibição oficial da resposta!");
+			}
+		});
+		
+		spFontSize.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				 Font nova = new Font("Arial", Font.PLAIN, (int)spFontSize.getValue());
+				 txtResposta.setFont(nova);
+			}
+		});
+		
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(txtPergunta.isEditable())
+					{	
+						String descricao = txtPergunta.getText();
+						Pergunta perg = Perguntas.getPergunta(Integer.parseInt(lbIdPergunta.getText()));
+
+						if (!descricao.equals(perg.getDescricao())) 
+						{
+							perg.setDescricao(descricao);
+							Perguntas.alterar(perg);
+							txtPergunta.setText(perg.getDescricao());
+							btnCarregar.doClick();
+						}
+						
+						btnNegrito.setEnabled(true);
+						btnItalico.setEnabled(true);
+						btnExcluir.setEnabled(true);
+						btnEnviarResposta.setEnabled(true);
+						cbLista.setEnabled(true);
+						txtPergunta.setEditable(false);
+						txtResposta.setEditable(true);
+					}
+					else
+					{
+						btnNegrito.setEnabled(false);
+						btnItalico.setEnabled(false);
+						btnExcluir.setEnabled(false);
+						btnEnviarResposta.setEnabled(false);
+						txtResposta.setEditable(false);
+						cbLista.setEnabled(false);
+						txtPergunta.setEditable(true);
+						txtPergunta.grabFocus();
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					int opcao = JOptionPane.showConfirmDialog(
+						    null,
+						    "Você realmente quer excluir essa pergunta?",
+						    "Exclusão",
+						    JOptionPane.YES_NO_OPTION);
+					
+					if(opcao == 0)
+					{
+						Perguntas.excluir(Integer.parseInt(lbIdPergunta.getText()));
+						btnCarregar.doClick();
+					}
+					
+					txtPergunta.setText("Escolha uma pergunta para responder!");
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		btnItalico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtResposta.setText(txtResposta.getText() + "<i>'Texto em itálico'</i>");
+			}
+		});
+		
+		btnNegrito.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtResposta.setText(txtResposta.getText() + "<b>'Texto em negrito'</b>");
+			}
+		});
+		
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,txtPergunta.getText(), "Pergunta completa", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+	
+		JPanel plValidar = new JPanel();
+		tabbedPane.addTab("Valida\u00E7\u00E3o de Pergunta", null, plValidar, null);
+		plValidar.setLayout(null);
+		
+		JLabel lbIdPerguntaV = new JLabel("|");
+		lbIdPerguntaV.setEnabled(false);
+		lbIdPerguntaV.setForeground(Color.BLACK);
+		lbIdPerguntaV.setFont(new Font("Arial", Font.PLAIN, 12));
+		lbIdPerguntaV.setBounds(8, 11, 37, 14);
+		plValidar.add(lbIdPerguntaV);
+		
+		JLabel label_2 = new JLabel("Ferramentas");
+		label_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		label_2.setBounds(135, 348, 93, 14);
+		plValidar.add(label_2);
+		
+		JButton btnNegritoV = new JButton("Negrito");
+		btnNegritoV.setEnabled(false);
+		btnNegritoV.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnNegritoV.setBounds(132, 373, 122, 37);
+		plValidar.add(btnNegritoV);
+		
+		JButton btnItalicoV = new JButton("It\u00E1lico");
+		btnItalicoV.setEnabled(false);
+		btnItalicoV.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnItalicoV.setBounds(132, 421, 122, 37);
+		plValidar.add(btnItalicoV);
+		
+		JLabel label_3 = new JLabel("Fonte");
+		label_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		label_3.setBounds(396, 380, 46, 14);
+		plValidar.add(label_3);
+		
+		JSpinner spFontSizeV = new JSpinner();
+		spFontSizeV.setModel(new SpinnerNumberModel(12, 1, 72, 1));
+		spFontSizeV.setBounds(436, 377, 53, 22);
+		plValidar.add(spFontSizeV);
+		
+		JButton btnFonteInfoV = new JButton("!");
+		btnFonteInfoV.setBounds(499, 378, 37, 21);
+		plValidar.add(btnFonteInfoV);
+		
+		JButton btnAnterior = new JButton("\u25C4");
+		btnAnterior.setEnabled(false);
+		btnAnterior.setFont(new Font("Arial", Font.BOLD, 35));
+		btnAnterior.setBounds(27, 183, 70, 70);
+		plValidar.add(btnAnterior);
+		
+		JLabel lblAnterior = new JLabel("Anterior");
+		lblAnterior.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblAnterior.setBounds(38, 161, 62, 14);
+		plValidar.add(lblAnterior);
+		
+		JLabel lblPrxima = new JLabel("Pr\u00F3xima");
+		lblPrxima.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblPrxima.setBounds(761, 161, 62, 14);
+		plValidar.add(lblPrxima);
+		
+		JButton btnProxima = new JButton("\u25BA");
+		btnProxima.setFont(new Font("Arial", Font.BOLD, 35));
+		btnProxima.setBounds(761, 183, 70, 70);
+		plValidar.add(btnProxima);
+		
+		JButton btnValidarResposta = new JButton("Validar resposta");
+		btnValidarResposta.setEnabled(false);
+		btnValidarResposta.setForeground(Color.BLACK);
+		btnValidarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnValidarResposta.setBounds(550, 421, 182, 37);
+		plValidar.add(btnValidarResposta);
+		
+		JButton btnEditarResposta = new JButton("Editar Resposta");
+		btnEditarResposta.setEnabled(false);
+		btnEditarResposta.setFont(new Font("Arial", Font.PLAIN, 12));
+		btnEditarResposta.setBounds(551, 373, 181, 37);
+		plValidar.add(btnEditarResposta);
+		
+		JComboBox cbListaV = new JComboBox();
+		cbListaV.setModel(new DefaultComboBoxModel(new String[] {"Listas", "Inserir padr\u00E3o", "Inserir enumerada", "Inserir item", "Como funciona?"}));
+		cbListaV.setEnabled(false);
+		cbListaV.setBounds(261, 373, 125, 20);
+		plValidar.add(cbListaV);
+		
+		JTextArea txtRespostaV = new JTextArea();
+		txtRespostaV.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtRespostaV.setText("A resposta vai estar aqui!");
+		txtRespostaV.setWrapStyleWord(true);
+		txtRespostaV.setLineWrap(true);
+		txtRespostaV.setBounds(120, 84, 617, 253);
+		plValidar.add(txtRespostaV);
+		
+		JTextArea txtPerguntaV = new JTextArea();
+		txtPerguntaV.setEditable(false);
+		txtPerguntaV.setWrapStyleWord(true);
+		txtPerguntaV.setLineWrap(true);
+		txtPerguntaV.setFont(new Font("Arial", Font.PLAIN, 28));
+		txtPerguntaV.setText("Navegue entre as respostas e as valide!");
+		txtPerguntaV.setBackground(SystemColor.control);
+		txtPerguntaV.setBounds(35, 0, 839, 85);
+		plValidar.add(txtPerguntaV);
+		
+		JButton btnEditarV = new JButton("Editar Pergunta");
+		btnEditarV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(txtPerguntaV.isEditable())
+					{	
+						String descricao = txtPerguntaV.getText();
+						Pergunta perg = Perguntas.getPergunta(Integer.parseInt(lbIdPerguntaV.getText()));
+
+						if (!descricao.equals(perg.getDescricao())) 
+						{
+							perg.setDescricao(descricao);
+							JOptionPane.showMessageDialog(null,perg.toString());
+							Perguntas.alterar(perg);
+							txtPerguntaV.setText(perg.getDescricao());
+						}
+						
+						txtPerguntaV.setEditable(false);
+					}
+					else
+					{
+						btnEditarV.setEnabled(true);
+						txtPerguntaV.setEditable(true);
+						txtPerguntaV.grabFocus();
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		btnEditarV.setFont(new Font("Arial", Font.PLAIN, 9));
+		btnEditarV.setEnabled(false);
+		btnEditarV.setBounds(8, 91, 102, 37);
+		plValidar.add(btnEditarV);
+        setPreferredSize(new Dimension(500, 200));
+		
+		cbListaV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String opcao = cbListaV.getSelectedItem().toString();
+				switch(opcao)
+				{
+					case ("Inserir padrão"):
+						txtRespostaV.setText(txtRespostaV.getText() + "\n<ul>\n"
+																  + "    \n"
+																  + "</ul> ");
+					break;
+					
+					case ("Inserir enumerada"):
+						txtRespostaV.setText(txtRespostaV.getText() + "\n<ol>\n"
+																  + "    \n"
+																  + "</ol> ");
+					break;
+					
+					case ("Inserir item"):
+						txtRespostaV.setText(txtRespostaV.getText() + "<li> </li>");
+					break;
+		
+					case ("Como funciona?"):
+						JOptionPane.showMessageDialog(null,"Você deve selecionar se quer adicionar ao seu texto \n"
+														 + "uma lista padrão ou enumerada, ou um item de lista. \n"
+														 + "Após selecionar um item você deve coloca-lo no seu \n"
+														 + "texto no lugar que deseja.");
+					break;
+					}
+				}
+		});
+		
+		plValidar.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				try {	
+					respostasInvalidas = Respostas.getRespostas();
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		spFontSizeV.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				 Font nova = new Font("Arial", Font.PLAIN, (int)spFontSizeV.getValue());
+				 txtRespostaV.setFont(nova);
+			}
+		});
+		
+		btnFonteInfoV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,"O tamanho da fonte não será alterado\n"
+							+ "na exibição oficial da resposta!");
+			}
+		});
+		
+		btnAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(!btnValidarResposta.isEnabled())	 
+					{
+						respostasInvalidas.previous();
+						
+						btnProxima.setEnabled(true);
+						btnEditarResposta.setEnabled(true);
+						btnEnviarResposta.setEnabled(true);
+						
+						char valida = respostasInvalidas.getString(4).charAt(0);
+						
+						while(valida == 'S')
+						{
+							respostasInvalidas.next();
+							valida = respostasInvalidas.getString(4).charAt(0);
+						}
+						
+						int idPerg = respostasInvalidas.getInt(6);
+						Pergunta perg = Perguntas.getPergunta(idPerg);
+						
+						txtRespostaV.setText(respostasInvalidas.getString(3));
+						txtPerguntaV.setText(perg.getDescricao());
+						lbIdPerguntaV.setText(perg.getIdPergunta() + "");
+						
+						if(respostasInvalidas.isFirst())
+						{
+							btnAnterior.setEnabled(false);
+							btnEditarResposta.setEnabled(false);
+							btnEnviarResposta.setEnabled(false);
+						}
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+
+		btnProxima.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(!btnValidarResposta.isEnabled())	
+					{
+						respostasInvalidas.next();
+							
+						btnAnterior.setEnabled(true);
+						btnEditarResposta.setEnabled(true);
+						btnValidarResposta.setEnabled(true);
+							
+						char valida = respostasInvalidas.getString(4).charAt(0);
+							
+						while(valida == 'S')
+						{
+							respostasInvalidas.next();
+							valida = respostasInvalidas.getString(4).charAt(0);
+						}
+							
+						int idPerg = respostasInvalidas.getInt(6);
+						Pergunta perg = Perguntas.getPergunta(idPerg);
+							
+						txtRespostaV.setText(respostasInvalidas.getString(3));
+						txtPerguntaV.setText(perg.getDescricao());
+						lbIdPerguntaV.setText(perg.getIdPergunta() + "");
+							
+						if(respostasInvalidas.isLast())
+						{
+							btnProxima.setEnabled(false);
+							btnEditarResposta.setEnabled(false);
+							btnEnviarResposta.setEnabled(false);
+						}
+					}
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+			}
+		});
+		
+		btnEditarResposta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnNegritoV.setEnabled(true);
+				btnItalicoV.setEnabled(true);
+				cbListaV.setEnabled(true);
+				btnValidarResposta.setEnabled(true);
+				txtRespostaV.setEditable(true);
+				btnEditarV.setEnabled(true);
+			}
+		});
+		
+		btnValidarResposta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnNegritoV.setEnabled(false);
+				btnItalicoV.setEnabled(false);
+				cbListaV.setEnabled(false);
+				btnValidarResposta.setEnabled(false);
+				txtRespostaV.setEditable(false);
+				btnEditarV.setEnabled(false);
+				
+				try
+				{
+					String respostaEditada = txtRespostaV.getText();
+					int idPergunta = Integer.parseInt(lbIdPerguntaV.getText());
+					Resposta resposta = new Resposta(Respostas.getRespostaPorIdPergunta(idPergunta));
+					resposta.setDescricao(respostaEditada);
+					resposta.setValida('S');
+					Respostas.alterar(resposta);
+					
+				}
+				catch(Exception err)
+				{
+					JOptionPane.showMessageDialog(null,err.getMessage());
+				}
+				
+				btnProxima.doClick();
+				JOptionPane.showMessageDialog(null,"Resposta validada com sucesso!");
+			}
+		});
+		
+		btnNegritoV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtRespostaV.setText(txtRespostaV.getText() + "<b>'Texto em negrito'</b>");
+			}
+		});
+		
+		btnItalicoV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtRespostaV.setText(txtRespostaV.getText() + "<i>'Texto em itálico'</i>");
+			}
+		});
+	}
+
+	public static void NewScreen() {
+		EventQueue.invokeLater(new Runnable(){
+			public void run() {
+				try
+				{
+					How2Usuario window = new How2Usuario();
+					window.setVisible(true);
+				}
+				catch(Exception err) 
+				{
+					err.printStackTrace();
+				}
+			}
+		});
+	}
+}

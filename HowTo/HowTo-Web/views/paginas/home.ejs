@@ -1,0 +1,127 @@
+<tr>
+    <td class="body-table" rowspan="2" style="width: 33%;">
+        <div class="titulos">O que é o HowTo?</div>
+        <div class="corpo">
+            <div style="font-size: 1.1em; text-align: justify; padding: 15px;">
+                <p>
+                         Precisa abrir os e-mails do seu chefe? Você não
+                    entende a linguagem dos jovens? Não tem ideia
+                    do que é um Instagram? Não importa qual o problema,
+                    o HowTo está aqui para te guiar pelos vastos
+                    oceanos da internet! 
+                </p>
+                <p>
+                    Nós do HowTo visamos guiar
+                    aqueles que não tem facilidade com seus computadores, 
+                    agindo como um guia. Você pergunta e nós respondemos.
+                    Com nosso acompanhamento individual, você fica a 
+                    poucos cliques de qualquer tarefa que você não saiba 
+                    realizar.
+                </p> 
+                <h2>
+                        E aí?<br> Prontos pra navegar?
+                </h2>
+            </div>
+        </div>
+    </td>
+    <td class="body-table" style="height: 30%;">
+        <div style="text-align: justify;">
+            <div style="font-weight: bold; font-size: 2em; margin: auto;">Precisa de Ajuda?</div>
+            <p>
+                Use essa seção pra enviar um pedido de ajuda para um de nossos ajudantes. Caso seu problema ainda não tenha sido resolvido, aguarde um pouco enquanto bolamos uma solução.
+            </p>
+            <a href="/perguntas" class='link'>
+                <button class="button">Pedir Ajuda</button>
+            </a>
+        </div>
+    </td>
+    <td class="body-table" style="height: 30%;">
+        <div style="text-align: justify;">
+            <div style="font-weight: bold; font-size: 2em; margin: auto;">É um ajudante?</div>
+            <p>
+                Se sua intenção for ajudar o próximo, você está com sorte. Use esta seção para visualizar perguntas ainda não resolvidas e dê uma mão para quem precisa!
+            </p>
+            <a href="/respostas" class="link">
+                <button class="button" onclick="">Enviar Ajuda</button>
+            </a>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td class="body-table" colspan="2" style="padding-bottom: 15px;padding-top: 5px;">
+        <div style="width: 100%; text-align: center; font-size: 1.9em; font-weight: bold;">
+            Para facilitar ainda mais sua vida, use atalhos para cá:
+        </div>
+        <div style="position: relative;  float: left; margin-left: 175px; text-align: center;">
+            Para seu computador</p>
+                <a href="download/How2.url" download="How2.url">
+                    <img style="width: 75px; height: 75px; margin-top: 5px;" src="https://image.flaticon.com/icons/png/512/61/61353.png" alt="">
+                </a>
+        </div>
+        <div style="position: relative; float: right; margin-right: 175px; text-align: center;">
+            <p>Para seu WhatsApp</p>
+            <img style="width: 100px; height: 100px; cursor: pointer; margin-top: -15px;" src="https://cdn.icon-icons.com/icons2/843/PNG/128/Whatsapp_icon-icons.com_67044.png" alt="" id="whats" onclick="Aparecer();">
+        </div>
+    </td>
+</tr>
+
+<style>
+    .fund-modal{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.137)
+    }
+</style>
+
+    <div class="modal">
+        <div>
+            <div class="modal-close" onclick="Fechar();">
+                <b> Fechar</b>
+            </div>
+            <h6 style="color: white;">Forneça seu telefone para lhe enviarmos um link para nosso site</h6>
+        </div>
+        <form action="" method="">
+            <div class="row">
+                <div class="col">
+                    <input type="tel" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="19" id="ddd" maxlength="2" required>
+                </div>
+                <div class="col">
+                    <input type="tel" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && tracinhos(this)" placeholder="91234-4321" id="tel" maxlength="10" required>
+                </div>
+            </div>
+            <button onclick="Whats();" type="" class="btn btn-primary" style="margin-top: 10px;">Concluir</button>
+        </form>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    //Abrir e fechar modal
+    function Aparecer() {
+        $('.modal').fadeIn("500");
+        $('.modal').css("display", "block");
+    }
+
+    function Fechar() {
+        $('.modal').fadeOut("500");
+
+        setTimeout(function() {
+            $('.modal').css("display", "none");
+        }, 1000)
+    }
+
+    function Whats()
+    {
+        alert("Ainda não aprendemos a fazer isso, sinto muito :(");
+    }
+</script>
+
+<!-- O QUE FALTA
+    WEB
+     1- CLIQUE DA PERGUNTA DPS DE PESQUISAR
+     2- BACKGROUND IMAGE
+    DESKTOP
+     1- LISTA
+     2- PERCORRER AS RESPOSTAS
+     3- MESSEGE BOX ALEATÓRIO
+     4- VALIDAR PERGUNTAS
+-->

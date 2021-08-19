@@ -1,0 +1,196 @@
+package bd.dbos;
+import java.sql.*;
+
+public class Resposta implements Cloneable
+{
+    private int idResposta,
+		   		idPergunta,
+		   		idAjudante;
+    private Date dataResposta;
+    private char valida;
+    private String descricao;
+
+    public void setIdResposta (int idResposta) throws Exception
+    {
+        if (idResposta <= 0)
+            throw new Exception ("id da resposta invalido");
+
+        this.idResposta = idResposta;
+    }
+
+    public void setIdPergunta (int idPergunta) throws Exception
+	{
+	    if (idPergunta <= 0)
+	        throw new Exception ("Id da pergunta invalido");
+
+	    this.idPergunta = idPergunta;
+    }
+
+    public void setIdAjudante (int idAjudante) throws Exception
+    {
+        if (idAjudante <= 0)
+            throw new Exception ("Id do Ajudante invalido");
+
+        this.idAjudante = idAjudante;
+    }
+
+    public void setDataResposta (Date data) throws Exception
+    {
+        if(data == null)
+        	throw new Exception("data inválida");
+        this.dataResposta = data;
+    }
+
+    public void setValida (char valida) throws Exception
+	{
+	    if (valida == ' ')
+	        throw new Exception ("Parametro valido");
+
+	    this.valida = valida;
+    }
+
+    public void setDescricao (String descricao) throws Exception
+	{
+	    if (descricao == null || descricao.equals(""))
+	        throw new Exception ("Descricao invalida");
+
+	    this.descricao = descricao;
+    }
+
+    public int getIdResposta ()
+    {
+        return this.idResposta;
+    }
+
+    public int getIdPergunta ()
+    {
+        return this.idPergunta;
+    }
+
+    public int getIdAjudante ()
+    {
+        return this.idAjudante;
+    }
+
+    public Date getDataResposta ()
+    {
+        return this.dataResposta;
+    }
+
+    public char getValida()
+    {
+		return this.valida;
+	}
+    
+    public char getRespondida()
+    {
+		return this.valida;
+	}
+
+    public String getDescricao ()
+    {
+        return this.descricao;
+    }
+
+    public Resposta (int idResp, int idPerg, int idAjud, Date data, char vali, String desc) throws Exception
+    {
+        this.setIdResposta (idResp);
+        this.setIdPergunta (idPerg);
+		this.setIdAjudante (idAjud);
+        this.setDataResposta(data);
+        this.setValida (vali);
+        this.setDescricao (desc);
+    }
+
+    public String toString ()
+    {
+        String ret="";
+
+        ret+="Id: "+this.idResposta+"\n";
+        ret+="Id(Pergunta): "+this.idPergunta  +"\n";
+        ret+="Data: "+this.dataResposta  +"\n";
+		ret+="Valida?: "+this.valida  +"\n";
+		ret+="Descrição: "+this.descricao + "\n";
+		ret+="Ajudante: "+this.idAjudante + "";
+
+        return ret;
+    }
+
+    public boolean equals (Object obj)
+	{
+	    if (this==obj)
+	    	return true;
+
+	    if (obj==null)
+	        return false;
+
+	    if (!(obj instanceof Resposta))
+	        return false;
+
+	    Resposta resp = (Resposta)obj;
+
+	    if (this.idResposta!=resp.idResposta)
+	        return false;
+
+	    if (this.idPergunta!=resp.idPergunta)
+	        return false;
+
+	    if (this.idAjudante!=resp.idAjudante)
+	        return false;
+
+	    if(!(this.dataResposta.equals(resp.dataResposta)))
+	    		return false;
+
+		if(this.valida!=resp.valida)
+			return false;
+
+		if(this.descricao!=resp.descricao)
+			return false;
+
+	    return true;
+   	}
+
+	public int hashCode ()
+	{
+		int ret=1;
+
+	    ret = 7*ret + new Integer(this.idResposta).hashCode();
+	    ret = 7*ret + new Integer(this.idPergunta).hashCode();
+	    ret = 7*ret + new Integer(this.idAjudante).hashCode();
+	    ret = 7*ret + this.dataResposta.hashCode();
+	    ret = 7*ret + new Character(this.valida).hashCode();
+	    ret = 7*ret + this.descricao.hashCode();
+
+	    if(ret < 0)
+	    	ret = -ret;
+
+	    return ret;
+	}
+
+	public Resposta (Resposta modelo) throws Exception
+	{
+		if(modelo == null)
+			throw new Exception("Modelo para copia vazio");
+
+	    this.idResposta = modelo.idResposta;
+		this.idPergunta = modelo.idPergunta;
+		this.idAjudante = modelo.idAjudante;
+		this.dataResposta = modelo.dataResposta;
+		this.valida = modelo.valida;
+		this.descricao = modelo.descricao;
+	}
+
+	public Object clone ()
+	{
+	    Resposta ret=null;
+
+	    try
+	    {
+	        ret = new Resposta (this);
+	    }
+	    catch (Exception erro)
+	    {}
+
+	   	return ret;
+    }
+}

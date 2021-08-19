@@ -1,0 +1,108 @@
+<tr>
+    <td class="body-table" rowspan="2" style="width: 50%;">
+        <div class="titulos" style="font-size: 1.5em; text-align:start; top: 5%;"><div id="desc-perg">Como responder uma pergunta?</div>
+        </div>
+        <div class="corpo">
+            <div id="resp">
+                <div id="resp-perg">
+                    <form action="respostas/inserir" method="POST">
+                        <textarea name="resp" id="" cols="65" rows="13" placeholder="Digite sua resposta para a pergunta selecionada aqui! O segredo é ser bem descritivo e breve ao mesmo tempo!"></textarea>
+                        <input type="text" name="idPerg" id="idPerg" style="display: none;">
+                        <button type="submit" class="botao-p">Enviar Resposta</button>
+                        <br>
+                        <div id="aut-perg">Autor: Você</div>
+                        <div id="data-perg">Hoje</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td class="body-table" style="height: 75%;">
+        <p style="font-size: 1.5em;">Aqui estão algumas perguntas sem nenhuma respostas :(</p>
+        <div id="perguntas">
+            <%for(var i=0;i<lista.length;i++) {%>
+                <div class='pergunta <%=lista[i].respondida%>' idPerg="<%=lista[i].idPergunta%>">
+                    <%=lista[i].descricao%>
+                </div>
+                <%}%>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td class="body-table">
+        <button onclick="Aparecer();" id="botao-down">Cadastre-se e faça o download do nosso app no seu desktop para ajudar muito mais!</button>
+    </td>
+</tr>
+
+<div class="mod">
+    <div>
+        <div class="modal-close" onclick="Fechar();">
+            <b> Fechar</b>
+        </div>
+        <h4>Faça seu cadastro ou baixe nosso app</h4>
+    </div>
+    <form action="/ajudantes/cadastrar" method="POST">
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" class="form-control" name="nome" id="nome" placeholder="Coloque seu nome" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Email" required>
+            <small id="emailHelp" class="form-text text-muted">Nós nunca iremos compartilhar seu email com ninguém</small>
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" name="senha" id="senha" placeholder="Senha" required>
+            <input type="password" class="form-control" name="senhaConf" id="senha" placeholder="Repita sua senha" style="margin-top: 5px;"
+                required>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+        <a  href="download/HowTo.rar" download="HowTo.rar"><button class="btn btn-secondary">Baixar App</button></a>
+</div>
+
+</body>
+
+<style>
+    /*Apenas as perguntas não respodidas serão mostradas */
+
+    .N {
+        display: block;
+    }
+
+    .S {
+        display: none;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        /*Click da pergunta para busca-la*/
+        $(".pergunta").click(function () {
+            var idPerg = $(this).attr("idPerg");
+            var url = "http://localhost:3000/respostas/" + idPerg + "";
+
+            $.getJSON(url, function (result) {
+                var perg = result;
+                $('#desc-perg').html(perg[0].descricao);
+                $("#idPerg").val(perg[0].idPergunta)
+            });
+        });
+    })
+
+    //Abrir e fechar o modal
+    function Aparecer() {
+        $('.mod').fadeIn("500");
+        $('.mod').css("display", "block");
+    }
+
+    function Fechar() {
+        $('.mod').fadeOut("500");
+
+        setTimeout(function () {
+            $('.mod').css("display", "none");
+        }, 1000)
+    }
+</script>
